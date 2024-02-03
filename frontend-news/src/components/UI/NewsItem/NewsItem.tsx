@@ -1,9 +1,11 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import {NewsMutation} from '../../../types';
 import {Button, Card, CardContent, CardMedia, Grid, Typography} from '@mui/material';
 import dayjs from 'dayjs';
 import {apiURL} from '../../../constants';
 import noImage from '../../../assets/images/no-image-available.png';
+import {useAppDispatch} from '../../../app/hooks';
+import {deleteNews, fetchAllNews} from '../../../store/newsThunks';
 
 interface Props {
   news: NewsMutation;
@@ -11,17 +13,23 @@ interface Props {
 
 const NewsItem: React.FC<Props> = ({news}) => {
   const createdDate = dayjs(news.createdAt).format('DD.MM.YYYY HH:mm:ss');
+  const dispatch = useAppDispatch();
   let cardImage = noImage;
   
   if (news.image) {
     cardImage = apiURL + '/' + news.image;
   }
   
+  const onDelete = useCallback(async () => {
+    await dispatch(deleteNews(news.id));
+    await dispatch(fetchAllNews());
+  }, [dispatch, news.id]);
+  
   return (
     <Grid item>
       <Card sx={{display: 'flex'}}>
         <CardMedia
-          sx={{ height: 140, width: 200 }}
+          sx={{height: 140, width: 200}}
           image={cardImage}
           title="green iguana"
         />
@@ -34,6 +42,7 @@ const NewsItem: React.FC<Props> = ({news}) => {
               At {createdDate}
             </Typography>
             <Button size="small">Read more</Button>
+            <Button size="small" onClick={onDelete}>Delete</Button>
           </Grid>
         </CardContent>
       </Card>

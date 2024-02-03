@@ -1,7 +1,7 @@
 import {News, NewsMutation} from '../types';
 import {createSlice} from '@reduxjs/toolkit';
 import {RootState} from '../app/store';
-import {createNewPost, fetchAllNews} from './newsThunks';
+import {createNewPost, deleteNews, fetchAllNews} from './newsThunks';
 
 interface NewsState {
   items: NewsMutation[];
@@ -10,7 +10,7 @@ interface NewsState {
   createLoading: boolean;
   fetchLoading: boolean;
   fetchOneLoading: boolean;
-  deleteLoading: false | string;
+  deleteLoading: false | number;
 }
 
 const initialState: NewsState = {
@@ -41,6 +41,12 @@ export const newsSlice = createSlice({
       state.createLoading = false;
     }).addCase(createNewPost.rejected, (state) => {
       state.createLoading = false;
+    }).addCase(deleteNews.pending, (state, {meta}) => {
+      state.deleteLoading = meta.arg;
+    }).addCase(deleteNews.fulfilled, (state) => {
+      state.deleteLoading = false;
+    }).addCase(deleteNews.rejected, (state) => {
+      state.deleteLoading = false;
     });
   }
 });
