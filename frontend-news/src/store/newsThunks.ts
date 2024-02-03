@@ -1,5 +1,5 @@
 import {createAsyncThunk} from '@reduxjs/toolkit';
-import {ApiNews, Comments, News, NewsMutation, SingleNews} from '../types';
+import {ApiComments, ApiNews, Comments, News, NewsMutation, SingleNews} from '../types';
 import axiosApi from '../axiosApi';
 
 export const fetchAllNews = createAsyncThunk<NewsMutation[]>(
@@ -56,6 +56,13 @@ export const deleteNews = createAsyncThunk<void, number>(
   'news/delete',
   async (id) => {
     await axiosApi.delete('/news/' + id);
+  }
+);
+
+export const createComment = createAsyncThunk<void, ApiComments>(
+  'comments/create',
+  async (comment: ApiComments) => {
+    await axiosApi.post('/comments', comment);
   }
 );
 

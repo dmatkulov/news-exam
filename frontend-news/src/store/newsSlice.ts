@@ -1,13 +1,22 @@
 import {Comments, NewsMutation, SingleNews} from '../types';
 import {createSlice} from '@reduxjs/toolkit';
 import {RootState} from '../app/store';
-import {createNewPost, deleteComment, deleteNews, fetchAllNews, fetchComment, fetchOneNews} from './newsThunks';
+import {
+  createComment,
+  createNewPost,
+  deleteComment,
+  deleteNews,
+  fetchAllNews,
+  fetchComment,
+  fetchOneNews
+} from './newsThunks';
 
 interface NewsState {
   items: NewsMutation[];
   item: SingleNews | null;
   comments: Comments[];
   createLoading: boolean;
+  createCommentLoading: boolean;
   fetchLoading: boolean;
   fetchCommentLoading: boolean;
   fetchOneLoading: boolean;
@@ -20,6 +29,7 @@ const initialState: NewsState = {
   item: null,
   comments: [],
   createLoading: false,
+  createCommentLoading: false,
   fetchLoading: false,
   fetchCommentLoading: false,
   fetchOneLoading: false,
@@ -71,6 +81,12 @@ export const newsSlice = createSlice({
       state.deleteCommentLoading = false;
     }).addCase(deleteComment.rejected, (state) => {
       state.deleteCommentLoading = false;
+    }).addCase(createComment.pending, (state) => {
+      state.createCommentLoading = true;
+    }).addCase(createComment.fulfilled, (state) => {
+      state.createCommentLoading = false;
+    }).addCase(createComment.rejected, (state) => {
+      state.createCommentLoading = false;
     });
   }
 });
@@ -81,6 +97,7 @@ export const selectAllNews = (state: RootState) => state.news.items;
 export const selectComments = (state: RootState) => state.news.comments;
 export const selectOneNews = (state: RootState) => state.news.item;
 export const selectCreateLoading = (state: RootState) => state.news.createLoading;
+export const selectCreateCommentLoading = (state: RootState) => state.news.createCommentLoading;
 export const selectFetchAllLoading = (state: RootState) => state.news.fetchLoading;
 export const selectFetchCommentLoading = (state: RootState) => state.news.fetchCommentLoading;
 export const selectFetchOneLoading = (state: RootState) => state.news.fetchOneLoading;

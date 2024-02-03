@@ -35,7 +35,6 @@ const NewsItem: React.FC<Props> = ({news}) => {
     navigate(`/news/${news.id}`);
   }, [dispatch, navigate, news.id]);
   
-  
   return (
     <Grid item>
       <Card sx={{display: 'flex'}}>

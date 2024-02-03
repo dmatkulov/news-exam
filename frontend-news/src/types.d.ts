@@ -20,4 +20,6 @@ export interface Comments {
   content: string;
 }
 
-export type CommentsWithoutId = Omit<Comments, 'id'>;
+export type CommentsWithoutId = Omit<Comments, 'id' | 'newsId'>;
+
+export type ApiComments = Omit<Comments, 'id'>;
