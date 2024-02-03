@@ -67,5 +67,34 @@ newsRouter.get('/:id', async (req, res, next) => {
   }
 });
 
+newsRouter.delete('/:id', async (req, res, next) => {
+  try {
+    const newsId = req.params.id;
+    
+    const [results] = await mysqlDb.getConnection().query(
+      'SELECT * FROM news WHERE id = ? ',
+      [newsId]
+    ) as RowDataPacket[];
+    
+    const existingNews = results[0];
+    
+    if (!existingNews) {
+      return res.status(404).send({error: 'News not found'});
+    }
+    
+    await mysqlDb.getConnection().query(
+      'DELETE FROM comments WHERE news_id = ? ', [newsId]
+    );
+    
+    await mysqlDb.getConnection().query(
+      'DELETE FROM news WHERE id = ? ', [newsId]
+    );
+    
+    res.send({message: 'News deleted successfully'});
+  } catch (e) {
+    return next(e);
+  }
+});
+
 
 export default newsRouter;
