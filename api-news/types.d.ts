@@ -6,7 +6,7 @@ export interface News {
   createdAt: string;
 }
 
-export type NewWithoutId = Omit<News, 'id'>;
+export type NewsWithoutId = Omit<News, 'id' | 'createdAt'>;
 
 export interface Comments {
   id: number;

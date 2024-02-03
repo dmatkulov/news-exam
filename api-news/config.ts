@@ -8,7 +8,7 @@ const config = {
   mysql: {
     host: 'localhost',
     user: 'root',
-    database: 'office',
+    database: 'press',
     password: '1qaz@WSX29',
   }
 };
