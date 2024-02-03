@@ -34,11 +34,13 @@ const SingleNewsPage: React.FC = () => {
   
   
   const onSubmit = async (comment: CommentsWithoutId) => {
-    await dispatch(createComment({
-      newsId: newsIdFromState,
-      ...comment}));
-
-    await dispatch(fetchComment(newsIdFromState));
+    if (newsIdFromState !== undefined) {
+      await dispatch(createComment({
+        newsId: newsIdFromState,
+        ...comment}));
+  
+      await dispatch(fetchComment(newsIdFromState));
+    }
   };
   
   return (

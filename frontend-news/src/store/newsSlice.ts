@@ -22,7 +22,7 @@ interface NewsState {
   fetchOneLoading: boolean;
   deleteLoading: false | number;
   deleteCommentLoading: false | number;
-  newsId: number;
+  newsId: number | undefined;
 }
 
 const initialState: NewsState = {
@@ -36,7 +36,7 @@ const initialState: NewsState = {
   fetchOneLoading: false,
   deleteLoading: false,
   deleteCommentLoading: false,
-  newsId: 0,
+  newsId: undefined,
 };
 
 export const newsSlice = createSlice({
