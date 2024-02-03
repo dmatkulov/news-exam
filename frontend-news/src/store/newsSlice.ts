@@ -1,7 +1,7 @@
 import {News, NewsMutation} from '../types';
 import {createSlice} from '@reduxjs/toolkit';
 import {RootState} from '../app/store';
-import {fetchAllNews} from './newsThunks';
+import {createNewPost, fetchAllNews} from './newsThunks';
 
 interface NewsState {
   items: NewsMutation[];
@@ -32,9 +32,15 @@ export const newsSlice = createSlice({
       state.fetchLoading = true;
     }).addCase(fetchAllNews.fulfilled, (state, {payload: news}) => {
       state.fetchLoading = false;
-      state.items = news;
+      state.items = news.reverse();
     }).addCase(fetchAllNews.rejected, (state) => {
       state.fetchLoading = false;
+    }).addCase(createNewPost.pending, (state) => {
+      state.createLoading = true;
+    }).addCase(createNewPost.fulfilled, (state) => {
+      state.createLoading = false;
+    }).addCase(createNewPost.rejected, (state) => {
+      state.createLoading = false;
     });
   }
 });
