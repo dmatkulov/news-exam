@@ -5,13 +5,15 @@ import dayjs from 'dayjs';
 import {apiURL} from '../../../constants';
 import noImage from '../../../assets/images/no-image-available.png';
 import {useAppDispatch} from '../../../app/hooks';
-import {deleteNews, fetchAllNews} from '../../../store/newsThunks';
+import {deleteNews, fetchAllNews, fetchOneNews} from '../../../store/newsThunks';
+import {useNavigate} from 'react-router-dom';
 
 interface Props {
   news: NewsMutation;
 }
 
 const NewsItem: React.FC<Props> = ({news}) => {
+  const navigate = useNavigate();
   const createdDate = dayjs(news.createdAt).format('DD.MM.YYYY HH:mm:ss');
   const dispatch = useAppDispatch();
   let cardImage = noImage;
@@ -24,6 +26,11 @@ const NewsItem: React.FC<Props> = ({news}) => {
     await dispatch(deleteNews(news.id));
     await dispatch(fetchAllNews());
   }, [dispatch, news.id]);
+  
+  const fetchOne = useCallback(async (id: number) => {
+    await dispatch(fetchOneNews(id));
+    navigate(`/news/${news.id}`);
+  }, [dispatch, navigate, news.id]);
   
   return (
     <Grid item>
@@ -41,7 +48,7 @@ const NewsItem: React.FC<Props> = ({news}) => {
             <Typography variant="body2" color="text.secondary" sx={{marginRight: 3}}>
               At {createdDate}
             </Typography>
-            <Button size="small">Read more</Button>
+            <Button size="small" onClick={() => fetchOne(news.id)}>Read more</Button>
             <Button size="small" onClick={onDelete}>Delete</Button>
           </Grid>
         </CardContent>

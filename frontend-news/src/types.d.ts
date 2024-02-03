@@ -5,10 +5,13 @@ export interface News {
   image: string | null;
   createdAt: string;
 }
+export type SingleNews = Omit<News, 'id' | 'image'>;
 
 export type NewsMutation = Omit<News, 'content'>;
 
 export type ApiNews = Omit<News, 'id' | 'createdAt'>;
+
+
 
 export interface Comments {
   id: number;

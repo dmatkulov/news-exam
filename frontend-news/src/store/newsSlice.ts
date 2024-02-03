@@ -1,11 +1,11 @@
-import {News, NewsMutation} from '../types';
+import {NewsMutation, SingleNews} from '../types';
 import {createSlice} from '@reduxjs/toolkit';
 import {RootState} from '../app/store';
-import {createNewPost, deleteNews, fetchAllNews} from './newsThunks';
+import {createNewPost, deleteNews, fetchAllNews, fetchOneNews} from './newsThunks';
 
 interface NewsState {
   items: NewsMutation[];
-  item: News | null;
+  item: SingleNews | null;
   comments: Comment[];
   createLoading: boolean;
   fetchLoading: boolean;
@@ -47,6 +47,13 @@ export const newsSlice = createSlice({
       state.deleteLoading = false;
     }).addCase(deleteNews.rejected, (state) => {
       state.deleteLoading = false;
+    }).addCase(fetchOneNews.pending, (state) => {
+      state.fetchOneLoading = true;
+    }).addCase(fetchOneNews.fulfilled, (state, {payload: news}) => {
+      state.fetchOneLoading = false;
+      state.item = news;
+    }).addCase(fetchOneNews.rejected, (state) => {
+      state.fetchOneLoading = false;
     });
   }
 });

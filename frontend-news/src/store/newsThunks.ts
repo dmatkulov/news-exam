@@ -1,5 +1,5 @@
 import {createAsyncThunk} from '@reduxjs/toolkit';
-import {ApiNews, NewsMutation} from '../types';
+import {ApiNews, News, NewsMutation, SingleNews} from '../types';
 import axiosApi from '../axiosApi';
 
 export const fetchAllNews = createAsyncThunk<NewsMutation[]>(
@@ -13,6 +13,25 @@ export const fetchAllNews = createAsyncThunk<NewsMutation[]>(
     }
     
     return news;
+  }
+);
+
+export const fetchOneNews = createAsyncThunk<SingleNews | null, number>(
+  'news/fetchOne',
+  async (id) => {
+    const newsResponse = await axiosApi.get<News | null>('/news/' + id);
+    const news = newsResponse.data;
+    
+    if (!news) {
+      return null;
+    }
+    
+    const selectedNews: SingleNews = {
+      title: news.title,
+      content: news.content,
+      createdAt: news.createdAt,
+    };
+    return selectedNews;
   }
 );
 
