@@ -3,9 +3,11 @@ import NewsPageItem from '../../components/UI/NewsPageItem/NewsPageItem';
 import {useAppDispatch, useAppSelector} from '../../app/hooks';
 import {
   selectCommentDeleteLoading,
-  selectComments, selectCreateCommentLoading,
+  selectComments,
+  selectCreateCommentLoading,
   selectFetchCommentLoading,
   selectFetchOneLoading,
+  selectNewsId,
   selectOneNews
 } from '../../store/newsSlice';
 import {CircularProgress, Divider, Typography} from '@mui/material';
@@ -13,16 +15,14 @@ import CommentItem from '../../components/UI/CommentItem/CommentItem';
 import {createComment, deleteComment, fetchComment} from '../../store/newsThunks';
 import CommentForm from '../../components/UI/CommentItem/CommentForm';
 import {CommentsWithoutId} from '../../types';
-import {useParams} from 'react-router-dom';
 
 const SingleNewsPage: React.FC = () => {
-  const {newsId} = useParams() as { newsId: string };
-  
   const news = useAppSelector(selectOneNews);
   const comments = useAppSelector(selectComments);
   const isLoading = useAppSelector(selectFetchOneLoading);
   const isCreating = useAppSelector(selectCreateCommentLoading);
   const commentsLoading = useAppSelector(selectFetchCommentLoading);
+  const newsIdFromState = useAppSelector(selectNewsId);
   
   const dispatch = useAppDispatch();
   const deleteLoading = useAppSelector(selectCommentDeleteLoading);
@@ -34,12 +34,11 @@ const SingleNewsPage: React.FC = () => {
   
   
   const onSubmit = async (comment: CommentsWithoutId) => {
-    const id = parseInt(newsId);
     await dispatch(createComment({
-      newsId: id,
+      newsId: newsIdFromState,
       ...comment}));
 
-    await dispatch(fetchComment(parseInt(newsId)));
+    await dispatch(fetchComment(newsIdFromState));
   };
   
   return (

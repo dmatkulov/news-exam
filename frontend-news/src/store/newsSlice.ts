@@ -1,5 +1,5 @@
 import {Comments, NewsMutation, SingleNews} from '../types';
-import {createSlice} from '@reduxjs/toolkit';
+import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {RootState} from '../app/store';
 import {
   createComment,
@@ -22,6 +22,7 @@ interface NewsState {
   fetchOneLoading: boolean;
   deleteLoading: false | number;
   deleteCommentLoading: false | number;
+  newsId: number;
 }
 
 const initialState: NewsState = {
@@ -34,13 +35,18 @@ const initialState: NewsState = {
   fetchCommentLoading: false,
   fetchOneLoading: false,
   deleteLoading: false,
-  deleteCommentLoading: false
+  deleteCommentLoading: false,
+  newsId: 0,
 };
 
 export const newsSlice = createSlice({
   name: 'news',
   initialState,
-  reducers: {},
+  reducers: {
+    setNewsId: (state, action: PayloadAction<number>) => {
+      state.newsId = action.payload;
+    }
+  },
   extraReducers: builder => {
     builder.addCase(fetchAllNews.pending, (state) => {
       state.fetchLoading = true;
@@ -92,8 +98,9 @@ export const newsSlice = createSlice({
 });
 
 export const newsReducer = newsSlice.reducer;
-
+export const {setNewsId} = newsSlice.actions;
 export const selectAllNews = (state: RootState) => state.news.items;
+export const selectNewsId = (state: RootState) => state.news.newsId;
 export const selectComments = (state: RootState) => state.news.comments;
 export const selectOneNews = (state: RootState) => state.news.item;
 export const selectCreateLoading = (state: RootState) => state.news.createLoading;

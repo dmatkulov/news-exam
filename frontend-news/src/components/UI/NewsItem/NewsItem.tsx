@@ -7,7 +7,7 @@ import noImage from '../../../assets/images/no-image-available.png';
 import {useAppDispatch, useAppSelector} from '../../../app/hooks';
 import {deleteNews, fetchAllNews, fetchComment, fetchOneNews} from '../../../store/newsThunks';
 import {useNavigate} from 'react-router-dom';
-import {selectDeleteLoading} from '../../../store/newsSlice';
+import {selectDeleteLoading, setNewsId} from '../../../store/newsSlice';
 
 interface Props {
   news: NewsMutation;
@@ -31,6 +31,7 @@ const NewsItem: React.FC<Props> = ({news}) => {
   
   const fetchOne = useCallback(async (id: number) => {
     await dispatch(fetchOneNews(id));
+    dispatch(setNewsId(id));
     await dispatch(fetchComment(news.id));
     navigate(`/news/${news.id}`);
   }, [dispatch, navigate, news.id]);
