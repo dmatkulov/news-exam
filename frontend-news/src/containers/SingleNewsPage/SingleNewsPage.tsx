@@ -59,6 +59,7 @@ const SingleNewsPage: React.FC = () => {
         <Typography variant="body1">No comments</Typography>
       )}
       <Divider/>
+      <p>Test</p>
       <CommentForm isLoading={isCreating} onSubmit={onSubmit}/>
     </div>
   );
